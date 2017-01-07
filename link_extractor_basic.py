@@ -21,7 +21,7 @@ def get_next_target(page):
         return url,end_quote
     else:
         return None,0
-
+'''
 def print_all_links(page):
     while True:
         url,endpos=get_next_target(page)
@@ -30,4 +30,34 @@ def print_all_links(page):
             page=page[endpos:]
         else:
             break
+'''
 
+def get_all_links(page):
+    links=[]
+    while True:
+        url,endpos=get_next_target(page)
+        if url:
+            links.append(url)
+            page=page[endpos:]
+        else:
+            break
+    return links
+
+def union(primary,secondary):
+    for each in secondary:
+        if each not in primary:
+            primary.append(each)
+
+
+def crawl_web(seed_page):
+    #links to be crawled
+    tocrawl=[seed_page]
+    #links already crawled
+    crawled=[]
+    while tocrawl:
+        page=tocrawl.pop()
+        if page not in crawled:
+            union(tocrawl,get_all_links(page))
+            crawled.append(page)
+    return crawled
+        
